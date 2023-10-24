@@ -7,10 +7,27 @@ use App\Models\Email;
 use App\Models\Phone;
 use Illuminate\Http\Request;
 
+/**
+ * @OA\Info(
+ *      version="1.0.0",
+ *      title="Contacts API",
+ *      description="API for contacts",
+ *      @OA\Contact(
+ *          email="alvaroalejo25@gmail.com",
+ *          name="Alvaro Zarabanda"
+ *      )
+ * )
+ */
 class ContactController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/contacts",
+     *     tags={"Contactos"},
+     *     summary="Obtener una lista de contactos",
+     *     @OA\Response(response=200, description="Operación exitosa"),
+     *     @OA\Tag(name="Contacts"),
+     * )
      */
     public function index()
     {
@@ -22,21 +39,21 @@ class ContactController extends Controller
 
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @OA/post("/contacts")
-     * @tags({"Contacts"})
-     * @summary("Create a new contact")
-     * @description("Creates a new contact with the given name, document, and address")
-     * @parameters({
-     *     @parameter(name="name", in="formData", required=true, type="string"),
-     *     @parameter(name="document", in="formData", required=true, type="string"),
-     *     @parameter(name="address", in="formData", required=true, type="string"),
-     * })
-     * @responses({
-     *     @response(code=201, description="Contact created successfully"),
-     *     @response(code=422, description="Validation errors"),
-     * })
+     * @OA\Post(
+     *     path="/api/contacts",
+     *     tags={"Contactos"},
+     *     summary="Crear un nuevo contacto",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="name", type="string", example="Nombre del contacto"),
+     *             @OA\Property(property="document", type="string", example="123456789"),
+     *             @OA\Property(property="address", type="string", example="Dirección del contacto")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Contacto creado exitosamente"),
+     *     @OA\Tag(name="Contacts"),
+     * )
      */
     public function store(Request $request)
     {
@@ -68,7 +85,20 @@ class ContactController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/contacts/{contact}",
+     *     tags={"Contactos"},
+     *     summary="Obtener detalles de un contacto específico",
+     *     @OA\Parameter(
+     *         name="contact",
+     *         in="path",
+     *         required=true,
+     *         description="ID del contacto",
+     *     ),
+     *     @OA\Response(response=200, description="Detalles del contacto"),
+     *     @OA\Response(response=404, description="Contacto no encontrado"),
+     *     @OA\Tag(name="Contacts"),
+     * )
      */
     public function show(Contact $contact)
     {
@@ -84,7 +114,26 @@ class ContactController extends Controller
 
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/contacts/{contact}",
+     *     tags={"Contactos"},
+     *     summary="Actualizar un contacto existente",
+     *     @OA\Parameter(
+     *         name="contact",
+     *         in="path",
+     *         required=true,
+     *         description="ID del contacto",
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="name", type="string", example="Nuevo nombre del contacto"),
+     *             @OA\Property(property="document", type="string", example="987654321"),
+     *             @OA\Property(property="address", type="string", example="Nueva dirección del contacto")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Contacto actualizado exitosamente"),
+     * )
      */
     public function update(Contact $contact, Request $request)
     {
@@ -112,7 +161,18 @@ class ContactController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/contacts/{contact}",
+     *     tags={"Contactos"},
+     *     summary="Eliminar un contacto",
+     *     @OA\Parameter(
+     *         name="contact",
+     *         in="path",
+     *         required=true,
+     *         description="ID del contacto",
+     *     ),
+     *     @OA\Response(response=200, description="Contacto eliminado exitosamente"),
+     * )
      */
     public function destroy(Contact $contact)
     {
@@ -124,6 +184,27 @@ class ContactController extends Controller
         return response()->json($data);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/contacts/{contact}/emails",
+     *     tags={"Emails"},
+     *     summary="Agregar un email a un contacto",
+     *     @OA\Parameter(
+     *         name="contact",
+     *         in="path",
+     *         required=true,
+     *         description="ID del contacto",
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="email", type="string", format="email", example="correo@dominio.com")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Email agregado exitosamente"),
+     *     @OA\Response(response=404, description="Contacto no encontrado"),
+     * )
+     */
     public function addEmail(Request $request, Contact $contact)
     {
         $contact->emails()->create([
@@ -136,6 +217,27 @@ class ContactController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/api/contacts/{contact}/emails/{email}",
+     *     tags={"Emails"},
+     *     summary="Eliminar un email de un contacto",
+     *     @OA\Parameter(
+     *         name="contact",
+     *         in="path",
+     *         required=true,
+     *         description="ID del contacto",
+     *     ),
+     *     @OA\Parameter(
+     *         name="email",
+     *         in="path",
+     *         required=true,
+     *         description="ID del email",
+     *     ),
+     *     @OA\Response(response=200, description="Email eliminado exitosamente"),
+     *     @OA\Response(response=404, description="Contacto o email no encontrado"),
+     * )
+     */
     public function deleteEmail(Contact $contact,Email $email)
     {
         $email = $contact->emails()->find($email->id);
@@ -147,7 +249,33 @@ class ContactController extends Controller
             'contact' => $contact->load('phones', 'emails')
         ]);
     }
-
+    /**
+     * @OA\Put(
+     *     path="/api/contacts/{contact}/emails/{email}",
+     *     tags={"Emails"},
+     *     summary="Actualizar un email de un contacto",
+     *     @OA\Parameter(
+     *         name="contact",
+     *         in="path",
+     *         required=true,
+     *         description="ID del contacto",
+     *     ),
+     *     @OA\Parameter(
+     *         name="email",
+     *         in="path",
+     *         required=true,
+     *         description="ID del email",
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="email", type="string", format="email", example="nuevo_correo@dominio.com")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Email actualizado exitosamente"),
+     *     @OA\Response(response=404, description="Contacto o email no encontrado"),
+     * )
+     */
     public function updateEmail(Contact $contact,int $email,Request $request)
     {
 
@@ -168,6 +296,28 @@ class ContactController extends Controller
         ]);
 
     }
+
+    /**
+     * @OA\Post(
+     *     path="/api/contacts/{contact}/phones",
+     *     tags={"Telefonos"},
+     *     summary="Agregar un teléfono a un contacto",
+     *     @OA\Parameter(
+     *         name="contact",
+     *         in="path",
+     *         required=true,
+     *         description="ID del contacto",
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="phone", type="string", example="123456789")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Teléfono agregado exitosamente"),
+     *     @OA\Response(response=404, description="Contacto no encontrado"),
+     * )
+     */
     public function addPhone(Request $request, Contact $contact){
         $contact->phones()->create([
             'phone' => $request->phone,
@@ -178,6 +328,29 @@ class ContactController extends Controller
             'contact' => $contact->load('phones', 'emails')
         ]);
     }
+
+
+    /**
+     * @OA\Delete(
+     *     path="/api/contacts/{contact}/phones/{phone}",
+     *     tags={"Telefonos"},
+     *     summary="Eliminar un teléfono de un contacto",
+     *     @OA\Parameter(
+     *         name="contact",
+     *         in="path",
+     *         required=true,
+     *         description="ID del contacto",
+     *     ),
+     *     @OA\Parameter(
+     *         name="phone",
+     *         in="path",
+     *         required=true,
+     *         description="ID del teléfono",
+     *     ),
+     *     @OA\Response(response=200, description="Teléfono eliminado exitosamente"),
+     *     @OA\Response(response=404, description="Contacto o teléfono no encontrado"),
+     * )
+     */
     public function deletePhone(Contact $contact,Phone $phone){
         $phone = $contact->phones()->find($phone->id);
 
@@ -189,6 +362,34 @@ class ContactController extends Controller
         ]);
     }
 
+
+    /**
+     * @OA\Put(
+     *     path="/api/contacts/{contact}/phones/{phone}",
+     *     tags={"Telefonos"},
+     *     summary="Actualizar un teléfono de un contacto",
+     *     @OA\Parameter(
+     *         name="contact",
+     *         in="path",
+     *         required=true,
+     *         description="ID del contacto",
+     *     ),
+     *     @OA\Parameter(
+     *         name="phone",
+     *         in="path",
+     *         required=true,
+     *         description="ID del teléfono",
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="phone", type="string", example="987654321")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Teléfono actualizado exitosamente"),
+     *     @OA\Response(response=404, description="Contacto o teléfono no encontrado"),
+     * )
+     */
     public function updatePhone(Contact $contact,int $phone,Request $request)  {
         $phone = $contact->phones()->find($phone);
 

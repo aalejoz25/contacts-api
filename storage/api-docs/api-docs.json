@@ -1,0 +1,389 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Contacts API",
+        "description": "API for contacts",
+        "contact": {
+            "name": "Alvaro Zarabanda",
+            "email": "alvaroalejo25@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/contacts": {
+            "get": {
+                "tags": [
+                    "Contactos"
+                ],
+                "summary": "Obtener una lista de contactos",
+                "operationId": "0f9efb5609dbb039b35ecafb28e492a2",
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Contactos"
+                ],
+                "summary": "Crear un nuevo contacto",
+                "operationId": "a3b0baf957a16c1ed505f2e8985c254c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Nombre del contacto"
+                                    },
+                                    "document": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Dirección del contacto"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Contacto creado exitosamente"
+                    }
+                }
+            }
+        },
+        "/api/contacts/{contact}": {
+            "get": {
+                "tags": [
+                    "Contactos"
+                ],
+                "summary": "Obtener detalles de un contacto específico",
+                "operationId": "1a9a36d323d70f1d5d15a163b14bb811",
+                "parameters": [
+                    {
+                        "name": "contact",
+                        "in": "path",
+                        "description": "ID del contacto",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalles del contacto"
+                    },
+                    "404": {
+                        "description": "Contacto no encontrado"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Contactos"
+                ],
+                "summary": "Actualizar un contacto existente",
+                "operationId": "e1c8ae746be20a66f17d489d3cf0d86c",
+                "parameters": [
+                    {
+                        "name": "contact",
+                        "in": "path",
+                        "description": "ID del contacto",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Nuevo nombre del contacto"
+                                    },
+                                    "document": {
+                                        "type": "string",
+                                        "example": "987654321"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Nueva dirección del contacto"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Contacto actualizado exitosamente"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Contactos"
+                ],
+                "summary": "Eliminar un contacto",
+                "operationId": "d98daa627c7df51be8d4689b627532ab",
+                "parameters": [
+                    {
+                        "name": "contact",
+                        "in": "path",
+                        "description": "ID del contacto",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Contacto eliminado exitosamente"
+                    }
+                }
+            }
+        },
+        "/api/contacts/{contact}/emails": {
+            "post": {
+                "tags": [
+                    "Emails"
+                ],
+                "summary": "Agregar un email a un contacto",
+                "operationId": "6d05c3f35c2143fac95ffe43ab2b2188",
+                "parameters": [
+                    {
+                        "name": "contact",
+                        "in": "path",
+                        "description": "ID del contacto",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "correo@dominio.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Email agregado exitosamente"
+                    },
+                    "404": {
+                        "description": "Contacto no encontrado"
+                    }
+                }
+            }
+        },
+        "/api/contacts/{contact}/emails/{email}": {
+            "put": {
+                "tags": [
+                    "Emails"
+                ],
+                "summary": "Actualizar un email de un contacto",
+                "operationId": "6fdae650d5c5ab92580b9a5a4e291369",
+                "parameters": [
+                    {
+                        "name": "contact",
+                        "in": "path",
+                        "description": "ID del contacto",
+                        "required": true
+                    },
+                    {
+                        "name": "email",
+                        "in": "path",
+                        "description": "ID del email",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "nuevo_correo@dominio.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Email actualizado exitosamente"
+                    },
+                    "404": {
+                        "description": "Contacto o email no encontrado"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Emails"
+                ],
+                "summary": "Eliminar un email de un contacto",
+                "operationId": "22e4b25df79fd1cbf214abcc7b3b3fbc",
+                "parameters": [
+                    {
+                        "name": "contact",
+                        "in": "path",
+                        "description": "ID del contacto",
+                        "required": true
+                    },
+                    {
+                        "name": "email",
+                        "in": "path",
+                        "description": "ID del email",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Email eliminado exitosamente"
+                    },
+                    "404": {
+                        "description": "Contacto o email no encontrado"
+                    }
+                }
+            }
+        },
+        "/api/contacts/{contact}/phones": {
+            "post": {
+                "tags": [
+                    "Telefonos"
+                ],
+                "summary": "Agregar un teléfono a un contacto",
+                "operationId": "c69a2f0e702ba6c3476e45431582f54b",
+                "parameters": [
+                    {
+                        "name": "contact",
+                        "in": "path",
+                        "description": "ID del contacto",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Teléfono agregado exitosamente"
+                    },
+                    "404": {
+                        "description": "Contacto no encontrado"
+                    }
+                }
+            }
+        },
+        "/api/contacts/{contact}/phones/{phone}": {
+            "put": {
+                "tags": [
+                    "Telefonos"
+                ],
+                "summary": "Actualizar un teléfono de un contacto",
+                "operationId": "203450eb8bb09257f9387ec0d3640407",
+                "parameters": [
+                    {
+                        "name": "contact",
+                        "in": "path",
+                        "description": "ID del contacto",
+                        "required": true
+                    },
+                    {
+                        "name": "phone",
+                        "in": "path",
+                        "description": "ID del teléfono",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "987654321"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Teléfono actualizado exitosamente"
+                    },
+                    "404": {
+                        "description": "Contacto o teléfono no encontrado"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Telefonos"
+                ],
+                "summary": "Eliminar un teléfono de un contacto",
+                "operationId": "c3225cb16a34f46960121c4b470adab8",
+                "parameters": [
+                    {
+                        "name": "contact",
+                        "in": "path",
+                        "description": "ID del contacto",
+                        "required": true
+                    },
+                    {
+                        "name": "phone",
+                        "in": "path",
+                        "description": "ID del teléfono",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Teléfono eliminado exitosamente"
+                    },
+                    "404": {
+                        "description": "Contacto o teléfono no encontrado"
+                    }
+                }
+            }
+        }
+    }
+}

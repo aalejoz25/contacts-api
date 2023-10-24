@@ -55,6 +55,7 @@ return [
     |
     */
 
+
     'url' => env('APP_URL', 'http://localhost'),
 
     'asset_url' => env('ASSET_URL'),
@@ -155,7 +156,9 @@ return [
     |
     */
 
-    'providers' => ServiceProvider::defaultProviders()->merge([
+    'providers' =>
+
+        ServiceProvider::defaultProviders()->merge([
         /*
          * Package Service Providers...
          */
